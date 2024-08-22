@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <CountUser></CountUser>
         <div class="row mb-2">
             <div class="col-3">
                 First Name
@@ -36,7 +37,11 @@
 </template>
   
 <script>
+    import CountUser from './CountUser'
     export default {
+        components : {
+            CountUser
+        },
         name: 'RegisterPage',
     }
 </script>
