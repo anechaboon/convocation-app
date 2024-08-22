@@ -13,6 +13,11 @@ const routes = [
     name: "login",
     component: () => import("@/components/Login.vue"),
   },
+  {
+    path: "/select-seat",
+    name: "select-seat",
+    component: () => import("@/components/user/SelectSeat.vue"),
+  },
 ]
 
 const router = createRouter({
