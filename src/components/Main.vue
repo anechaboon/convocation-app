@@ -1,14 +1,14 @@
 <template>
-  <register></register>
+  <register-user></register-user>
 </template>
 
 <script>
 
-import Register from './user/Register'
+import RegisterUser from './user/RegisterUser'
 export default {
   name: 'MainPage',
   components: {
-    Register
+    RegisterUser
   },
   props: {
     msg: String

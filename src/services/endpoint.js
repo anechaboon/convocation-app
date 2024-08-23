@@ -29,10 +29,10 @@ class User {
     }
 }
 
-class Seat {
-    async getSeat(queryString){
+class Convocation {
+    async getConvocation(queryString){
         try {
-            const response = await axios.get(baseUrl + '/seat' + queryString);
+            const response = await axios.get(baseUrl + '/convocation' + queryString);
             return response;
         } catch (err) {
             return err.response;
@@ -43,5 +43,5 @@ class Seat {
 
 export default {
     User: new User(),
-    Seat: new Seat()
+    Convocation: new Convocation()
 }

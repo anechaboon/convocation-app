@@ -1,5 +1,98 @@
+<script setup>
+    import Api from "@/services/endpoint.js";
+    import moment from 'moment';
+    import { onMounted, ref } from 'vue';
+    import EasyDataTable from 'vue3-easy-data-table';
+    import 'vue3-easy-data-table/dist/style.css';
+    import CountUser from './CountUser';
+    import { useUsersStore } from "@/store/users";
+    const usersStore = useUsersStore();
+
+    // ใช้ ref หรือ reactive แทน data
+    const date = ref(new Date());
+    const allSeatrow = ref([]);
+    const searchUser = ref("");
+    const newReserve = ref({});
+    const headers = ref([
+        { text: "First Name", value: "firstName", sortable: true },
+        { text: "Last Name", value: "lastName", sortable: true },
+        { text: "Phone Number", value: "phoneNumber", sortable: true },
+    ]);
+    const items = ref([]);
+
+    // ฟังก์ชันที่ทำงานเมื่อคอมโพเนนต์ถูกเมาท์
+    onMounted(async () => {
+        fetchConvocation()
+    });
+
+    // ฟังก์ชันเพื่อดึงข้อมูลผู้ใช้
+    const fetchUser = async () => {
+        const queryString = `?q=${searchUser.value}`;
+        try {
+            const res = await Api.User.getUser(queryString);
+            if (res) {
+                items.value = res.data;
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
+
+    const fetchConvocation = async () => {
+        const formattedDate = moment(date.value).format('YYYY-MM-DD');
+        const queryString = `?date=${formattedDate}`;
+        
+        try {
+            const res = await Api.Convocation.getConvocation(queryString);
+            console.log(`🚀 log:res`, res);
+            
+            // const reserved = res.data.reserved.split(',')
+            const charEndRow = res.data.endRow;
+            const allSeatrowData = [];
+
+            const allSeatDiff = ((charEndRow.charCodeAt(0) - 65 + 1) * res.data.endColumn) - (res.data.allSeat);
+
+            for (let i = 65; i <= charEndRow.charCodeAt(0); i++) {
+                const char = String.fromCharCode(i);
+                const seatrow = [];
+                let endColumnNumber = res.data.endColumn;
+                if (allSeatDiff && i == 65) {
+                    endColumnNumber -= allSeatDiff;
+                }
+                for (let j = 1; j <= endColumnNumber; j++) {
+                    seatrow.push({
+                        seatName: `${char}${j}`,
+                        reservedID: null
+                    });
+                }
+                allSeatrowData.push(seatrow);
+            }
+            allSeatrow.value = allSeatrowData;
+            console.log(`🚀 log:allSeatrowData`,allSeatrowData )
+
+            await fetchUser();
+        } catch (error) {
+            console.error('Error fetching seats:', error);
+        }
+    }
+
+    // ฟังก์ชันสำหรับการจองที่นั่ง
+    const reserve = (seatName, idx) => {
+        newReserve.value = {
+            seatName: seatName,
+            reservedID: usersStore.id
+        }
+        const index = allSeatrow.value[idx].findIndex(element => element.seatName === seatName);
+        if (allSeatrow.value[idx][index].reservedID === null) {
+            allSeatrow.value[idx][index].reservedID = usersStore.id
+        }
+    };
+</script>
 <template>
     <div class="container">
+        <div class="row">
+            <CountUser></CountUser>
+        </div>
         <div class="row">
             <div class="col-12 col-md-6">
                 <!-- Date Picker Row -->
@@ -27,13 +120,13 @@
                         <div v-for="(seatrow, idx) in allSeatrow" :key="idx">
                         <div class="seat-row">
                             <span
-                            class="seat"
-                            :class="{ reserved: seat.reserved }"
                             v-for="(seat, i) in seatrow"
+                            class="seat"
+                            :class="{ reserved: seat.reservedID }"
                             :key="i"
-                            @click="reserve(seat.name, idx)"
+                            @click="reserve(seat.seatName, idx)"
                             >
-                            {{ seat.name }}
+                            {{ seat.seatName }}
                             </span>
                         </div>
                         </div>
@@ -51,82 +144,9 @@
                     />
             </div>
         </div>
-       
-      
     </div>
 </template>
-<script>
-    import Api from "@/services/endpoint.js"
-    import moment from 'moment'
 
-    import EasyDataTable from 'vue3-easy-data-table';
-    import 'vue3-easy-data-table/dist/style.css';
-
-    export default {
-        name: 'SelectSeat',
-        components: {
-            EasyDataTable
-        },
-        props: {},
-        data() {
-            return {
-                date: new Date(),
-                allSeatrow: [],
-                searchUser: "",
-                headers:[
-                    { text: "First Name", value: "firstName", sortable: true },
-                    { text: "Last Name", value: "lastName", sortable: true },
-                    { text: "Phone Number", value: "phoneNumber", sortable: true },
-                ],
-                items: [],
-            }
-        },
-        async mounted() {
-            let date = moment(this.date).format('YYYY-MM-DD')
-            let queryString = `?date=${date}`
-            let res = await Api.Seat.getSeat(queryString)
-            console.log(`🚀 log:res`,res )
-            let charEndRow = res.data.endRow
-            let allSeatrow = []
-
-            // res.data.seatAvailable
-            let allSeatDiff = ((charEndRow.charCodeAt(0) - 65 + 1) * res.data.endColumn) - res.data.seatAvailable;
-
-            // for (let i = charEndRow.charCodeAt(0); i >= 65 ; i--) {
-            for (let i = 65; i <= charEndRow.charCodeAt(0); i++) {
-                let char = String.fromCharCode(i)
-                let seatrow = []
-                let endColumnNumber = res.data.endColumn
-                if(allSeatDiff && i == 65){
-                    endColumnNumber -= allSeatDiff 
-                }
-                for (let j = 1; j <= endColumnNumber; j++) {
-                    seatrow.push({
-                        name: `${char}${j}`,
-                        reserved: 0
-                    })
-                }
-                allSeatrow.push(seatrow)
-            }
-            this.allSeatrow = allSeatrow
-
-            this.fetchUser()
-        },
-        methods: {
-            async fetchUser(){
-                let queryString = `?q=${this.searchUser}`
-                let res = await Api.User.getUser(queryString)
-                if(res){
-                    this.items = res.data
-                }
-            },
-            reserve(seatName, idx){
-                let index = this.allSeatrow[idx].findIndex(elment => elment.name === seatName);
-                this.allSeatrow[idx][index].reserved = this.allSeatrow[idx][index].reserved ? 0 : 1
-            },
-        }
-    }
-</script>
 <style scoped>
 
   /* ปรับแต่งสไตล์ที่ใช้ในหน้า booking seat */
