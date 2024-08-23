@@ -4,7 +4,7 @@
 
 <script>
 
-import RegisterUser from './user/RegisterUser'
+import RegisterUser from '../views/user/RegisterUser.vue'
 export default {
   name: 'MainPage',
   components: {

@@ -17,8 +17,6 @@ const fetchConvocation = async () => {
 
   
   console.log('Available seat after update:', usersStore.availableSeat); // ตรวจสอบค่าหลังการอัพเดต
-
-
 };
 
 // เรียกใช้ fetchSeat เมื่อคอมโพเนนต์ถูกเมาท์
@@ -28,10 +26,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <div>
-      <p>Available Seat: {{ usersStore.availableSeat }}</p>
-      <p>Registered: {{ usersStore.registered }}</p>
-    </div>
+  <div>
+    <p>Available Seat: {{ usersStore.availableSeat }}</p>
+    <p>Registered: {{ usersStore.registered }}</p>
   </div>
 </template>

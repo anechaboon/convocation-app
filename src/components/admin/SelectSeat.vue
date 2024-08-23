@@ -2,9 +2,7 @@
     import Api from "@/services/endpoint.js";
     import moment from 'moment';
     import { onMounted, ref } from 'vue';
-    import EasyDataTable from 'vue3-easy-data-table';
     import 'vue3-easy-data-table/dist/style.css';
-    import CountUser from './CountUser';
     import { useUsersStore } from "@/store/users";
     const usersStore = useUsersStore();
 
@@ -13,11 +11,6 @@
     const allSeatrow = ref([]);
     const searchUser = ref("");
     const newReserve = ref({});
-    const headers = ref([
-        { text: "First Name", value: "firstName", sortable: true },
-        { text: "Last Name", value: "lastName", sortable: true },
-        { text: "Phone Number", value: "phoneNumber", sortable: true },
-    ]);
     const items = ref([]);
 
     // ฟังก์ชันที่ทำงานเมื่อคอมโพเนนต์ถูกเมาท์
@@ -89,71 +82,54 @@
     };
 </script>
 <template>
-    <div class="container">
-        <div class="row">
-            <CountUser></CountUser>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <!-- Date Picker Row -->
-                <div class="row mb-3 justify-content-center">
-                    <div class="col-12 col-md-6">
-                    <VueDatePicker
-                        v-model="date"
-                        :format="'dd/MM/yyyy'"
-                        :min-date="new Date()"
-                    ></VueDatePicker>
-                    </div>
-                </div>
-            
-                <!-- Reserve Button Row -->
-                <div class="row mb-3 justify-content-center">
-                    <div class="col-12 col-md-6">
-                    <button class="btn btn-primary form-control">Reserve</button>
-                    </div>
-                </div>
-            
-                <!-- Seat Row -->
-                <div class="row mb-3 justify-content-center">
-                    <div class="col-12 col-md-12 text-center">
-                    <div v-if="allSeatrow">
-                        <div v-for="(seatrow, idx) in allSeatrow" :key="idx">
-                        <div class="seat-row">
-                            <span
-                            v-for="(seat, i) in seatrow"
-                            class="seat"
-                            :class="{ reserved: seat.reservedID }"
-                            :key="i"
-                            @click="reserve(seat.seatName, idx)"
-                            >
-                            {{ seat.seatName }}
-                            </span>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
+    <div class="row">
+        <CountUser></CountUser>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-12">
+            <!-- Date Picker Row -->
+            <div class="row mb-3 justify-content-center">
+                <div class="col-12 col-md-6">
+                <VueDatePicker
+                    v-model="date"
+                    :format="'dd/MM/yyyy'"
+                    :min-date="new Date()"
+                ></VueDatePicker>
                 </div>
             </div>
-            <div class="col-12 col-md-6">
-                <div style="text-align: left">
-                    <label>SearchBy:</label><input v-model="searchUser" @keyup="fetchUser()" />
+        
+            <!-- Reserve Button Row -->
+            <div class="row mb-3 justify-content-center">
+                <div class="col-12 col-md-6">
+                <button class="btn btn-primary form-control">Reserve</button>
                 </div>
-                    <EasyDataTable
-                       :headers="headers"
-                        :items="items"
-                    />
+            </div>
+        
+            <!-- Seat Row -->
+            <div class="row mb-3 justify-content-center">
+                <div class="col-12 col-md-12 text-center">
+                <div v-if="allSeatrow">
+                    <div v-for="(seatrow, idx) in allSeatrow" :key="idx">
+                    <div class="seat-row">
+                        <span
+                        v-for="(seat, i) in seatrow"
+                        class="seat"
+                        :class="{ reserved: seat.reservedID }"
+                        :key="i"
+                        @click="reserve(seat.seatName, idx)"
+                        >
+                        {{ seat.seatName }}
+                        </span>
+                    </div>
+                    </div>
+                </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-
-  /* ปรับแต่งสไตล์ที่ใช้ในหน้า booking seat */
-  .container {
-    max-width: 100%;
-  }
-
   /* จัดเรียงที่นั่งให้เป็นกล่อง ๆ */
   .seat-row {
     display: flex;
