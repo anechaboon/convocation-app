@@ -29,16 +29,16 @@
         const charEndRow = convocation.endRow;
         const allSeatrowData = [];
 
-        const allSeatDiff = ((charEndRow.charCodeAt(0) - 65 + 1) * convocation.endColumn) - (convocation.allSeat);
-
+        const allSeatDiff = (charEndRow * convocation.endColumn) - (convocation.allSeat);
         // loop a to z
-        for (let i = 65; i <= charEndRow.charCodeAt(0); i++) {
-            const char = String.fromCharCode(i);
+        for (let i = 0; i < charEndRow; i++) {
+            const charCode = 65+i
+            const char = String.fromCharCode(charCode);
             const seatrow = [];
             let endColumnNumber = convocation.endColumn;
 
             // check allSeat equal (row * column) if not equal reduce seat of first row
-            if (allSeatDiff && i == 65) {
+            if (allSeatDiff && i == 0) {
                 endColumnNumber -= allSeatDiff;
             }
 
@@ -53,7 +53,7 @@
                     reservedID = checkReserved[0].reservedID
                 }
                 seatrow.push({
-                    seatNumber: `${char}${j}`,
+                    seatNumber: seatNumber,
                     reservedID: reservedID
                 });
             }
