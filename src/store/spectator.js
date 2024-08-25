@@ -25,11 +25,13 @@ export const useSpectatorStore = defineStore('spectator', {
       this.openModalRegister = openModalRegister
     },
     async loadSpectatorList(searchSpectator = ""){
+      console.log(`🚀 log:loadSpectatorList` )
       const queryString = `?q=${searchSpectator}`;
       try {
         const res = await Api.Spectator.getSpectator(queryString);
         if (res) {
           this.spectatorList = res.data
+          console.log(`🚀 log:this.spectatorList`,this.spectatorList )
         }
       } catch (error) {
           console.error('Error fetching spectator:', error);
