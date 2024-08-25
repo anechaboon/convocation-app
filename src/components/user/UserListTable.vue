@@ -19,11 +19,18 @@
 
 </script>
 <template>
-  <div class="mb-2" style="text-align: left">
-    <label>SearchBy:</label><input class="pl-5" v-model="searchUser" @keyup="usersStore.loadUsersList(searchUser)" />
+  <div class="card">
+    <div class="mb-1 d-flex" style="text-align: left">
+      <div class="col-2 w-fit me-2 pt-1">
+        <label>Search:</label>
+      </div>
+      <div class="col-10 col-md-4 col-lg-2">
+        <input class="pl-5 form-control" v-model="searchUser" @keyup="usersStore.loadUsersList(searchUser)" style="height: 1.8em;" />
+      </div>
+    </div>
+    <EasyDataTable
+        :headers="headers"
+        :items="usersStore.usersList"
+    />
   </div>
-  <EasyDataTable
-      :headers="headers"
-      :items="usersStore.usersList"
-  />
 </template>

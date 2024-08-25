@@ -17,9 +17,13 @@ export const useUsersStore = defineStore('users', {
       seatAvailable : "",
       registerAvailable : "",
       registered : "",
-    }
+    },
+    openModalRegister: false
   }),
   actions: {
+    setOpenModalRegister(openModalRegister) {
+      this.openModalRegister = openModalRegister
+    },
     async loadUsersList(searchUser = ""){
       const queryString = `?q=${searchUser}`;
       try {

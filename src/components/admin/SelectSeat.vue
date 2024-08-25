@@ -18,6 +18,9 @@
         reservedID: ""
     })
 
+    let clicks = ref(0)
+    const timer = ref(null) 
+
     onMounted(async () => {
         await Promise.all([usersStore.loadConvocation(), usersStore.loadReserved()]);
         prepareSeatRow()
@@ -31,14 +34,14 @@
 
         const allSeatDiff = (charEndRow * convocation.endColumn) - (convocation.allSeat);
         // loop a to z
-        for (let i = 0; i < charEndRow; i++) {
+        for (let i = charEndRow-1; i >= 0 ; i--) {
             const charCode = 65+i
             const char = String.fromCharCode(charCode);
             const seatrow = [];
             let endColumnNumber = convocation.endColumn;
 
             // check allSeat equal (row * column) if not equal reduce seat of first row
-            if (allSeatDiff && i == 0) {
+            if (allSeatDiff && i == charEndRow-1) {
                 endColumnNumber -= allSeatDiff;
             }
 
@@ -65,7 +68,7 @@
 
     }
 
-    const reserve = (seat) => {
+    const reserve = (event, seat) => {
         // check seat has reserved ?
         if(seat.reservedID === null){
             reservation.value = {
@@ -73,6 +76,17 @@
                 reservedID: usersStore.userID,
             }
         }
+        clicks.value += 1 
+        if(clicks.value === 1) {
+        timer.value = setTimeout(function() {
+            clicks.value = 0
+        }, 700);
+        } else{
+            clearTimeout(timer.value); 
+            clicks.value = 0;
+            confirmReserve()
+        }  
+        
     };
 
     const confirmReserve = async () => {
@@ -96,7 +110,7 @@
 </script>
 <template>
 
-    <div class="row">
+    <div class="card me-3">
         <div class="col-12 col-md-12">
             <!-- Date Picker Row -->
             <!-- <div class="row mb-3 justify-content-center">
@@ -109,13 +123,6 @@
                 </div>
             </div> -->
         
-            <!-- Reserve Button Row -->
-            <div class="row mb-3 justify-content-center">
-                <div class="col-12 col-md-6">
-                <button class="btn btn-primary form-control" @click="confirmReserve">Reserve</button>
-                </div>
-            </div>
-        
             <!-- Seat Row -->
             <div class="row mb-3 justify-content-center">
                 <div class="col-12 col-md-12 text-center">
@@ -127,7 +134,7 @@
                         class="seat"
                         :class="{ reserved: seat.seatNumber == reservation.seatNumber || seat.reservedID}"
                         :key="i"
-                        @click="reserve(seat)"
+                        @click="reserve($event, seat)"
                         >
                         <b>{{ seat.seatNumber }}</b>
                         </span>

@@ -19,7 +19,7 @@
         <div class="row mb-2">
             <div class="col-3"></div>
             <div class="col-7">
-                <button class="btn btn-success form-control">Login</button>
+                <button class="btn btn-primary form-control">Login</button>
             </div>
         </div>
 

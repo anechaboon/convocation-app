@@ -4,9 +4,6 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { useUsersStore } from "@/store/users";
 import { getCurrentInstance } from 'vue';
-// import moment from 'moment';
-
-// const date = ref(new Date());
 
 const usersStore = useUsersStore();
 const { proxy } = getCurrentInstance();
@@ -50,56 +47,70 @@ const register = async () => {
             console.error('Error during registration:', error);
         }
     }
-
-    
 };
 </script>
 
-
 <template>
-    <div class="row mb-2">
-        <div class="col-3">
-            First Name
-        </div>
-        <div class="col-7">
-            <input class="form-control" type="text" name="first_name" id="first_name" v-model="firstName">
-        </div>
-    </div>
-    <div class="row mb-2">
-        <div class="col-3">
-            Last Name
-        </div>
-        <div class="col-7">
-            <input class="form-control" type="text" name="last_name" id="last_name" v-model="lastName">
-        </div>
-    </div>
-    <div class="row mb-2">
-        <div class="col-3">
-            Telephone
-        </div>
-        <div class="col-7">
-            <input class="form-control" type="text" name="phoneNumber" id="phoneNumber" v-model="phoneNumber" @input="validatePhoneNumber" >
-            <span v-if="!isValidPhone" style="color: red">Invalid phone number</span>
-        </div>
-    </div>
-
-    <!-- <div class="row mb-2">
-        <div class="col-3">
-            Date
-        </div>
-        <div class="col-7">
-            <VueDatePicker
-                v-model="date"
-                :format="'dd/MM/yyyy'"
-                :min-date="new Date()"
-            ></VueDatePicker>
-        </div>
-    </div> -->
-    <div class="row mb-2">
-        <div class="col-3"></div>
-        <div class="col-7">
-            <button class="btn btn-success form-control" @click="register()">Register</button>
+    <div v-if="usersStore.openModalRegister" class="modal-overlay  fade show">
+        <div class="modal-content">
+            <div class="row mb-3 justify-content-end">
+                <div class="col-1" @click="usersStore.setOpenModalRegister(false)">
+                <p><b>x</b></p>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">
+                    First Name
+                </div>
+                <div class="col-7">
+                    <input class="form-control" type="text" name="first_name" id="first_name" v-model="firstName">
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">
+                    Last Name
+                </div>
+                <div class="col-7">
+                    <input class="form-control" type="text" name="last_name" id="last_name" v-model="lastName">
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">
+                    Telephone
+                </div>
+                <div class="col-7">
+                    <input class="form-control" type="text" name="phoneNumber" id="phoneNumber" v-model="phoneNumber" @input="validatePhoneNumber" >
+                    <span v-if="!isValidPhone" style="color: red">Invalid phone number</span>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3"></div>
+                <div class="col-7">
+                    <button class="btn btn-primary form-control" @click="register()">Register</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
+
+<style scoped>
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        width: 70%;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+</style>
   

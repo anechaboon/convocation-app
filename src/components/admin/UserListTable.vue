@@ -27,28 +27,35 @@
 
 </script>
 <template>
-  <div class="mb-2" style="text-align: left">
-    <label>SearchBy:</label><input class="pl-5" v-model="searchUser" @keyup="usersStore.loadUsersList(searchUser)" />
+  <div class="card">
+    <div class="mb-1 d-flex" style="text-align: left">
+      <div class="col-2 w-fit me-2 pt-1">
+        <label>Search:</label>
+      </div>
+      <div class="col-10 col-md-4">
+        <input class="pl-5 form-control" v-model="searchUser" @keyup="usersStore.loadUsersList(searchUser)" style="height: 1.8em;" />
+      </div>
+    </div>
+    <EasyDataTable
+        v-model:items-selected="itemsSelected"
+        :headers="headers"
+        :items="usersStore.usersList"
+        @click-row="showRow"
+    >
+    
+        <template #item-operation="item">
+          <div class="operation-wrapper" v-if="typeof item.reservedSeat != 'undefined' && item.reservedSeat === false">
+            <span
+              class="operation-icon"
+              :class="{ highlightbooking: item._id == usersStore.bookingID}"
+              @click="reserveSeat(item)"
+            >
+            Reserve
+            </span>
+          </div>
+        </template>
+    </EasyDataTable>
   </div>
-  <EasyDataTable
-      v-model:items-selected="itemsSelected"
-      :headers="headers"
-      :items="usersStore.usersList"
-       @click-row="showRow"
-  >
-  
-      <template #item-operation="item">
-        <div class="operation-wrapper" v-if="typeof item.reservedSeat != 'undefined' && item.reservedSeat === false">
-          <span
-            class="operation-icon"
-            :class="{ highlightbooking: item._id == usersStore.bookingID}"
-            @click="reserveSeat(item)"
-          >
-          Reserve
-          </span>
-        </div>
-      </template>
-  </EasyDataTable>
 </template>
 
 <style scoped>

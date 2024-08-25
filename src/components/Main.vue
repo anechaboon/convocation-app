@@ -1,14 +1,14 @@
 <template>
-  <register-user></register-user>
+  <home-page></home-page>
 </template>
 
 <script>
 
-import RegisterUser from '../views/user/RegisterUser.vue'
+import HomePage from '../views/user/HomePage.vue'
 export default {
   name: 'MainPage',
   components: {
-    RegisterUser
+    HomePage
   },
   props: {
     msg: String

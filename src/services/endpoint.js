@@ -40,7 +40,6 @@ class User {
 class Convocation {
     async getConvocation(queryString = ''){
         try {
-            console.log(`🚀 log:getConvocation`, )
             const response = await axios.get(baseUrl + '/convocation' + queryString);
             return response;
         } catch (err) {

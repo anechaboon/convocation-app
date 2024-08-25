@@ -12,8 +12,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <p>Available Seat: {{ usersStore.registerAvailable }}</p>
-    <p>Registered: {{ usersStore.registered }}</p>
+  <div class="d-flex justify-content-between mb-3">
+    <div class="col-12 col-md-6 card" style="width: 49%;">
+      <b>Available Seat: {{ usersStore.convocation.registerAvailable }}</b>
+    </div>
+    <div class="col-12 col-md-6 card" style="width: 49%;">
+      <b>Registered: {{ usersStore.convocation.registered }}</b>
+    </div>
   </div>
 </template>
+
