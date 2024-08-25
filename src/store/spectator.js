@@ -24,9 +24,11 @@ export const useSpectatorStore = defineStore('spectator', {
     setOpenModalRegister(openModalRegister) {
       this.openModalRegister = openModalRegister
     },
-    async loadSpectatorList(searchSpectator = ""){
-      console.log(`🚀 log:loadSpectatorList` )
-      const queryString = `?q=${searchSpectator}`;
+    async loadSpectatorList(searchSpectator = "", nophone = false){
+      let queryString = `?q=${searchSpectator}`;
+      if(nophone){
+        queryString += "&nophone=yes"
+      }
       try {
         const res = await Api.Spectator.getSpectator(queryString);
         if (res) {

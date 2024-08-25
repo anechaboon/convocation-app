@@ -12,7 +12,7 @@
     ]);
 
     onMounted(async () => {
-        spectatorStore.loadSpectatorList()
+        spectatorStore.loadSpectatorList("",true)
     });
 
 </script>
@@ -20,7 +20,7 @@
   <div class="card">
     <div class="mb-2 d-flex" style="text-align: left">
       <div class="col-10 col-md-4 col-lg-2">
-        <input class="pl-5 form-control" v-model="searchSpectator"  placeholder="Search" @keyup="spectatorStore.loadSpectatorList(searchSpectator)" style="height: 1.8em;" />
+        <input class="pl-5 form-control" v-model="searchSpectator"  placeholder="Search" @keyup="spectatorStore.loadSpectatorList(searchSpectator,true)" style="height: 1.8em;" />
       </div>
     </div>
     <EasyDataTable
