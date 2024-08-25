@@ -2,20 +2,20 @@
 import Api from "@/services/endpoint.js";
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-// import moment from 'moment';
 import { useUsersStore } from "@/store/users";
 import { getCurrentInstance } from 'vue';
+// import moment from 'moment';
+
+// const date = ref(new Date());
 
 const usersStore = useUsersStore();
-const { proxy } = getCurrentInstance(); // ใช้ getCurrentInstance เพื่อเข้าถึง globalProperties
-// ใช้ Composition API ในการประกาศตัวแปร
+const { proxy } = getCurrentInstance();
+
 const firstName = ref("");
 const lastName = ref("");
 const phoneNumber = ref("");
 const isValidPhone = ref(true);
-// const date = ref(new Date());
 
-// ใช้ Vue Router
 const router = useRouter();
 
 const validatePhoneNumber = () => {
@@ -43,7 +43,6 @@ const register = async () => {
         try {
             const res = await Api.User.register(body);
             if (res.status === 201) {
-                console.log(`🚀 log:res.data`,res.data )
                 usersStore.setUserData(res.data)
                 router.push('/user-list');
             }

@@ -1,27 +1,13 @@
 <script setup>
-import { onMounted } from 'vue'; // นำเข้าจาก Vue
-import Api from "@/services/endpoint.js";
+import { onMounted } from 'vue';
 // import moment from 'moment';
 import { useUsersStore } from "@/store/users";
 
 const usersStore = useUsersStore();
 
-const fetchConvocation = async () => {
-  // let date = moment().format('YYYY-MM-DD'); // ใช้ moment() แทน this.date
-  // let queryString = `?date=${date}`;
-  let res = await Api.Convocation.getConvocation();
-  console.log('Fetched seat data:', res.data.registerAvailable); // ตรวจสอบค่าที่ดึงมา
 
-  usersStore.setRegisterAvailable(res.data.registerAvailable); 
-  usersStore.setRegistered(res.data.registered); 
-
-  
-  console.log('Available seat after update:', usersStore.registerAvailable); // ตรวจสอบค่าหลังการอัพเดต
-};
-
-// เรียกใช้ fetchSeat เมื่อคอมโพเนนต์ถูกเมาท์
 onMounted(() => {
-  fetchConvocation();
+  usersStore.loadConvocation();
 });
 </script>
 

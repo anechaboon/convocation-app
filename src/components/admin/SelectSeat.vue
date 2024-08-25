@@ -1,83 +1,55 @@
 <script setup>
     import Api from "@/services/endpoint.js";
-    // import moment from 'moment';
     import { onMounted, ref } from 'vue';
     import 'vue3-easy-data-table/dist/style.css';
     import { useUsersStore } from "@/store/users";
     import { getCurrentInstance } from 'vue';
+    // import moment from 'moment';
 
-    const users = useUsersStore();
-    const { proxy } = getCurrentInstance(); // ใช้ getCurrentInstance เพื่อเข้าถึง globalProperties
-
-    // ใช้ ref หรือ reactive แทน data
     // const date = ref(new Date());
+    // const currentDate = ref(moment(date.value).format('YYYY-MM-DD'))
+
+    const usersStore = useUsersStore();
+    const { proxy } = getCurrentInstance();
+
     const allSeatrow = ref([]);
     const reservation = ref({
         seatNumber: "",
         reservedID: ""
     })
-    // const currentDate = ref(moment(date.value).format('YYYY-MM-DD'))
 
-    // ฟังก์ชันที่ทำงานเมื่อคอมโพเนนต์ถูกเมาท์
     onMounted(async () => {
+        await Promise.all([usersStore.loadConvocation(), usersStore.loadReserved()]);
         prepareSeatRow()
     });
 
-    const fetchConvocation = async () => {
-        // const queryString = `?date=${currentDate.value}`;
-        
-        try {
-            const res = await Api.Convocation.getConvocation();
-            if(res){
-                users.setAvailable(res.data)
-                return res.data
-            }
-        } catch (error) {
-            console.error('Error fetching convocation:', error);
-        }
-        return []
-    }
-
-    const fetchReserved = async () => {
-        // const queryString = `?date=${currentDate.value}`;
-        try {
-            let res = await Api.Reservation.getReserved();
-            if(res){
-                return res.data
-            }
-        } catch (error) {
-            console.error('Error fetching reserved:', error);
-        }
-    }
-
-
-    const prepareSeatRow = async (reservedData = {}) => {
-
-        let convocation, reserved;
-        if(Object.keys(reservedData).length){
-            convocation = await fetchConvocation();
-            reserved = reservedData;
-        } else {
-            [convocation, reserved] = await Promise.all([fetchConvocation(), fetchReserved()]);
-        }
-        
+    const prepareSeatRow = async () => {
+        let convocation = usersStore.convocation
+        let reserved = usersStore.reservedsList
         const charEndRow = convocation.endRow;
         const allSeatrowData = [];
 
         const allSeatDiff = ((charEndRow.charCodeAt(0) - 65 + 1) * convocation.endColumn) - (convocation.allSeat);
 
+        // loop a to z
         for (let i = 65; i <= charEndRow.charCodeAt(0); i++) {
             const char = String.fromCharCode(i);
             const seatrow = [];
             let endColumnNumber = convocation.endColumn;
+
+            // check allSeat equal (row * column) if not equal reduce seat of first row
             if (allSeatDiff && i == 65) {
                 endColumnNumber -= allSeatDiff;
             }
+
             for (let j = 1; j <= endColumnNumber; j++) {
                 let reservedID = null
                 let seatNumber = `${char}${j}`
+
+                // check seat has reserved ?
                 let checkReserved = reserved.filter(row => row.seatNumber == seatNumber); 
                 if(checkReserved.length){
+                    // reserved by id
                     reservedID = checkReserved[0].reservedID
                 }
                 seatrow.push({
@@ -87,43 +59,38 @@
             }
             allSeatrowData.push(seatrow);
         }
+
+        // object to draw all seat map
         allSeatrow.value = allSeatrowData;
-        console.log(`🚀 log:allSeatrowData`,allSeatrowData )
 
     }
 
     const reserve = (seat) => {
+        // check seat has reserved ?
         if(seat.reservedID === null){
             reservation.value = {
                 seatNumber: seat.seatNumber,
-                reservedID: users.userID,
+                reservedID: usersStore.userID,
             }
         }
-        console.log(`🚀 log:reserve.reservation`,reservation.value )
-
     };
 
     const confirmReserve = async () => {
 
-        console.log(`🚀 log:reservation.value.reservedID`,reservation.value.reservedID )
         if (reservation.value.reservedID == null || reservation.value.reservedID == "") {
-            console.log(`🚀 log:NotPass`, )
             proxy.$showAlert('Seat Number!', 'Please Select Seat', 'warning');
         } else {
-            console.log(`🚀 log:Pass`, )
             let body = {
                 seatNumber: reservation.value.seatNumber,
                 reservedID: reservation.value.reservedID,
                 // date: moment(date.value).format('YYYY-MM-DD'),
             }
             let res = await Api.Reservation.addReserved(body);
-            console.log(`🚀 log:res`,res )
-            console.log(`🚀 log:res.users`,res.data.users )
-            prepareSeatRow(res.data.reserved)
-            users.setUsersListData(res.data.users)
-            users.setbookingID("")
-            users.setSeatAvailable(res.data.convocation.seatAvailable)
-            
+            await usersStore.setReservedsList(res.data.reserved)
+            prepareSeatRow()
+            usersStore.setUsersListData(res.data.users)
+            usersStore.setbookingID("")
+            usersStore.setSeatAvailable(res.data.convocation.seatAvailable)
         }
     }
 </script>
