@@ -2,10 +2,10 @@
     import { onMounted, ref } from 'vue';
     import EasyDataTable from 'vue3-easy-data-table';
     import 'vue3-easy-data-table/dist/style.css';
-    import { useUsersStore } from "@/store/users";
+    import { useSpectatorStore } from "@/store/spectator";
 
-    const usersStore = useUsersStore();
-    const searchUser = ref("");
+    const spectatorStore = useSpectatorStore();
+    const searchSpectator = ref("");
     const headers = ref([
         { text: "First Name", value: "firstName", sortable: true },
         { text: "Last Name", value: "lastName", sortable: true },
@@ -13,7 +13,7 @@
     ]);
 
     onMounted(async () => {
-        usersStore.loadUsersList()
+        spectatorStore.loadSpectatorList()
     });
 
 
@@ -25,12 +25,12 @@
         <label>Search:</label>
       </div>
       <div class="col-10 col-md-4 col-lg-2">
-        <input class="pl-5 form-control" v-model="searchUser" @keyup="usersStore.loadUsersList(searchUser)" style="height: 1.8em;" />
+        <input class="pl-5 form-control" v-model="searchSpectator" @keyup="spectatorStore.loadSpectatorList(searchSpectator)" style="height: 1.8em;" />
       </div>
     </div>
     <EasyDataTable
         :headers="headers"
-        :items="usersStore.usersList"
+        :items="spectatorStore.spectatorList"
     />
   </div>
 </template>

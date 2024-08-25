@@ -1,5 +1,5 @@
 <script setup>
-import HomePage from '../../components/user/HomePage.vue';
+import HomePage from '../../components/spectator/HomePage.vue';
 </script>
 <template>
     <HomePage />

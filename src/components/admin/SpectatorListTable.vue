@@ -2,10 +2,10 @@
     import { onMounted, ref } from 'vue';
     import EasyDataTable from 'vue3-easy-data-table';
     import 'vue3-easy-data-table/dist/style.css';
-    import { useUsersStore } from "@/store/users";
+    import { useSpectatorStore } from "@/store/spectator";
 
-    const usersStore = useUsersStore();
-    const searchUser = ref("");
+    const spectatorStore = useSpectatorStore();
+    const searchSpectator = ref("");
     const headers = ref([
         { text: "First Name", value: "firstName", sortable: true },
         { text: "Last Name", value: "lastName", sortable: true },
@@ -14,13 +14,13 @@
     ]);
 
     onMounted(async () => {
-        usersStore.setbookingID("")
-        usersStore.loadUsersList()
+        spectatorStore.setbookingID("")
+        spectatorStore.loadSpectatorList()
     });
 
-    const reserveSeat = (user) => {
-        usersStore.setUserData(user)
-        usersStore.setbookingID(user._id)
+    const reserveSeat = (spectator) => {
+        spectatorStore.setSpectatorData(spectator)
+        spectatorStore.setbookingID(spectator._id)
     };
 
   
@@ -33,13 +33,13 @@
         <label>Search:</label>
       </div>
       <div class="col-10 col-md-4">
-        <input class="pl-5 form-control" v-model="searchUser" @keyup="usersStore.loadUsersList(searchUser)" style="height: 1.8em;" />
+        <input class="pl-5 form-control" v-model="searchSpectator" @keyup="spectatorStore.loadSpectatorList(searchSpectator)" style="height: 1.8em;" />
       </div>
     </div>
     <EasyDataTable
         v-model:items-selected="itemsSelected"
         :headers="headers"
-        :items="usersStore.usersList"
+        :items="spectatorStore.spectatorList"
         @click-row="showRow"
     >
     
@@ -47,7 +47,7 @@
           <div class="operation-wrapper" v-if="typeof item.reservedSeat != 'undefined' && item.reservedSeat === false">
             <span
               class="operation-icon"
-              :class="{ highlightbooking: item._id == usersStore.bookingID}"
+              :class="{ highlightbooking: item._id == spectatorStore.bookingID}"
               @click="reserveSeat(item)"
             >
             Reserve

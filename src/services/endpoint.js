@@ -10,10 +10,10 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 // สร้าง baseUrl โดยใช้ environment variable
 const baseUrl = `${window.location.protocol}//localhost:${process.env.VUE_APP_PORT}`;
 
-class User {
-    async getUser(queryString = ''){
+class Spectator {
+    async getSpectator(queryString = ''){
         try {
-            const response = await axios.get(baseUrl + '/users' + queryString);
+            const response = await axios.get(baseUrl + '/spectator' + queryString);
             return response;
         } catch (err) {
             return err.response;
@@ -21,22 +21,21 @@ class User {
     }
     async register(data){
         try {
-            const response = await axios.post(baseUrl + '/users/register', data);
+            const response = await axios.post(baseUrl + '/spectator/register', data);
             return response;
         } catch (err) {
             return err.response;
         }
     }
-    async updateUser(id, data){
+    async updateSpectator(id, data){
         try {
-            const response = await axios.put(baseUrl + '/users/' + id , data);
+            const response = await axios.put(baseUrl + '/spectator/' + id , data);
             return response;
         } catch (err) {
             return err.response;
         }
     }
 }
-
 class Convocation {
     async getConvocation(queryString = ''){
         try {
@@ -48,7 +47,6 @@ class Convocation {
     }
 
 }
-
 class Reservation {
     async getReserved(queryString = ''){
         try {
@@ -67,9 +65,20 @@ class Reservation {
         }
     }
 }
+class User {
+    async login(data){
+        try {
+            const response = await axios.post(baseUrl + '/user/login', data);
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+}
 
 export default {
-    User: new User(),
+    Spectator: new Spectator(),
     Convocation: new Convocation(),
     Reservation: new Reservation(),
+    User: new User()
 }

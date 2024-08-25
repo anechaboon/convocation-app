@@ -25,6 +25,9 @@ export default {
   color: #2c3e50;
   margin-top: 40px;
 }
+.min-height-md{
+  min-height: 18em;
+}
 .bg-white{
   background-color: white;
 }

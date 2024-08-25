@@ -1,23 +1,23 @@
 <script setup>
 import { onMounted } from 'vue';
 // import moment from 'moment';
-import { useUsersStore } from "@/store/users";
+import { useSpectatorStore } from "@/store/spectator";
 
-const usersStore = useUsersStore();
+const spectatorStore = useSpectatorStore();
 
 
 onMounted(() => {
-  usersStore.loadConvocation();
+  spectatorStore.loadConvocation();
 });
 </script>
 
 <template>
   <div class="d-flex justify-content-between mb-3">
     <div class="col-12 col-md-6 card" style="width: 49%;">
-      <b>Available Seat: {{ usersStore.convocation.registerAvailable }}</b>
+      <b>Available Seat: {{ spectatorStore.convocation.registerAvailable }}</b>
     </div>
     <div class="col-12 col-md-6 card" style="width: 49%;">
-      <b>Registered: {{ usersStore.convocation.registered }}</b>
+      <b>Registered: {{ spectatorStore.convocation.registered }}</b>
     </div>
   </div>
 </template>

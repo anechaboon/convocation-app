@@ -1,16 +1,16 @@
 import { defineStore } from 'pinia';
 import Api from "@/services/endpoint.js";
 
-export const useUsersStore = defineStore('users', {
+export const useSpectatorStore = defineStore('spectator', {
   state: () => ({
     seatAvailable: 0,
     registerAvailable: 0,
     registered: 0,
-    userID: "",
+    spectatorID: "",
     firstName: "",
     lastName: "",
     phoneNumber: "",
-    usersList: [],
+    spectatorList: [],
     bookingID: "",
     reservedsList: [],
     convocation: {
@@ -24,15 +24,15 @@ export const useUsersStore = defineStore('users', {
     setOpenModalRegister(openModalRegister) {
       this.openModalRegister = openModalRegister
     },
-    async loadUsersList(searchUser = ""){
-      const queryString = `?q=${searchUser}`;
+    async loadSpectatorList(searchSpectator = ""){
+      const queryString = `?q=${searchSpectator}`;
       try {
-        const res = await Api.User.getUser(queryString);
+        const res = await Api.Spectator.getSpectator(queryString);
         if (res) {
-          this.usersList = res.data
+          this.spectatorList = res.data
         }
       } catch (error) {
-          console.error('Error fetching users:', error);
+          console.error('Error fetching spectator:', error);
       }
     },
     async loadConvocation(){
@@ -67,14 +67,14 @@ export const useUsersStore = defineStore('users', {
     setRegistered(registered){
       this.registered = registered
     },
-    setUserData(data){
-      this.userID = data._id
+    setSpectatorData(data){
+      this.spectatorID = data._id
       this.firstName = data.firstName
       this.lastName = data.lastName
       this.phoneNumber = data.phoneNumber
     },
-    setUsersListData(usersList){
-      this.usersList = usersList
+    setSpectatorListData(spectatorList){
+      this.spectatorList = spectatorList
     },
     setbookingID(bookingID){
       this.bookingID = bookingID

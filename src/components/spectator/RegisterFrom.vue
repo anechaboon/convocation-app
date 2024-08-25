@@ -1,11 +1,10 @@
 <script setup>
 import Api from "@/services/endpoint.js";
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
-import { useUsersStore } from "@/store/users";
-import { getCurrentInstance } from 'vue';
+import { ref, getCurrentInstance } from 'vue';
+import { useSpectatorStore } from "@/store/spectator";
 
-const usersStore = useUsersStore();
+const spectatorStore = useSpectatorStore();
 const { proxy } = getCurrentInstance();
 
 const firstName = ref("");
@@ -38,10 +37,10 @@ const register = async () => {
         };
         
         try {
-            const res = await Api.User.register(body);
+            const res = await Api.Spectator.register(body);
             if (res.status === 201) {
-                usersStore.setUserData(res.data)
-                router.push('/user-list');
+                spectatorStore.setSpectatorData(res.data)
+                router.push('/spectator-list');
             }
         } catch (error) {
             console.error('Error during registration:', error);
@@ -51,10 +50,10 @@ const register = async () => {
 </script>
 
 <template>
-    <div v-if="usersStore.openModalRegister" class="modal-overlay  fade show">
+    <div v-if="spectatorStore.openModalRegister" class="modal-overlay  fade show">
         <div class="modal-content">
             <div class="row mb-3 justify-content-end">
-                <div class="col-1" @click="usersStore.setOpenModalRegister(false)">
+                <div class="col-1" @click="spectatorStore.setOpenModalRegister(false)">
                 <p><b>x</b></p>
                 </div>
             </div>

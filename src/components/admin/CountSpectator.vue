@@ -1,13 +1,13 @@
 <script setup>
 import { onMounted } from 'vue'; // นำเข้าจาก Vue
 // import moment from 'moment';
-import { useUsersStore } from "@/store/users";
+import { useSpectatorStore } from "@/store/spectator";
 
-const usersStore = useUsersStore();
+const spectatorStore = useSpectatorStore();
 
 // เรียกใช้ fetchSeat เมื่อคอมโพเนนต์ถูกเมาท์
 onMounted(() => {
-  usersStore.loadConvocation();
+  spectatorStore.loadConvocation();
 });
 </script>
 
@@ -19,7 +19,7 @@ onMounted(() => {
           <font-awesome-icon icon="chair" class="icon-size-3 w-fit"/>
         </div>
         <div class="col-10 pt-2">
-          <b class="w-fit">Seat Available: {{ usersStore.convocation.seatAvailable }}</b>
+          <b class="w-fit">Seat Available: {{ spectatorStore.convocation.seatAvailable }}</b>
         </div>
       </div>
     </div>
@@ -29,7 +29,7 @@ onMounted(() => {
           <font-awesome-icon icon="users" class="icon-size-3 w-fit"/>
         </div>
         <div class="col-10 pt-2">
-          <b class="w-fit">Register Available: {{ usersStore.convocation.registerAvailable }}</b>
+          <b class="w-fit">Register Available: {{ spectatorStore.convocation.registerAvailable }}</b>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@ onMounted(() => {
           <font-awesome-icon icon="id-card" class="icon-size-3 w-fit"/>
         </div>
         <div class="col-10 pt-2">
-          <b class="w-fit">Registered: {{ usersStore.convocation.registered }}</b>
+          <b class="w-fit">Registered: {{ spectatorStore.convocation.registered }}</b>
         </div>
       </div>
     </div>

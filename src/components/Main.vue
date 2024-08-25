@@ -4,7 +4,7 @@
 
 <script>
 
-import HomePage from '../views/user/HomePage.vue'
+import HomePage from '../views/spectator/HomePage.vue'
 export default {
   name: 'MainPage',
   components: {

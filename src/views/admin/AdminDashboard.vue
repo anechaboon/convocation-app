@@ -1,17 +1,17 @@
 <script setup>
 import SelectSeat from '../../components/admin/SelectSeat.vue';
-import CountUser from '../../components/admin/CountUser.vue';
-import UserListTable from '../../components/admin/UserListTable.vue';
+import CountSpectator from '../../components/admin/CountSpectator.vue';
+import SpectatorListTable from '../../components/admin/SpectatorListTable.vue';
 </script>
 <template>
     <div class="container">
-        <CountUser />
+        <CountSpectator />
         <div class="row">
             <div class="col-12 col-md-6">
                 <SelectSeat />
             </div>
             <div class="col-12 col-md-6">
-                <UserListTable ref="userTable"/>
+                <SpectatorListTable />
             </div>
         </div>
     </div>

@@ -2,14 +2,14 @@
     import Api from "@/services/endpoint.js";
     import { onMounted, ref } from 'vue';
     import 'vue3-easy-data-table/dist/style.css';
-    import { useUsersStore } from "@/store/users";
+    import { useSpectatorStore } from "@/store/spectator";
     import { getCurrentInstance } from 'vue';
     // import moment from 'moment';
 
     // const date = ref(new Date());
     // const currentDate = ref(moment(date.value).format('YYYY-MM-DD'))
 
-    const usersStore = useUsersStore();
+    const spectatorStore = useSpectatorStore();
     const { proxy } = getCurrentInstance();
 
     const allSeatrow = ref([]);
@@ -22,13 +22,13 @@
     const timer = ref(null) 
 
     onMounted(async () => {
-        await Promise.all([usersStore.loadConvocation(), usersStore.loadReserved()]);
+        await Promise.all([spectatorStore.loadConvocation(), spectatorStore.loadReserved()]);
         prepareSeatRow()
     });
 
     const prepareSeatRow = async () => {
-        let convocation = usersStore.convocation
-        let reserved = usersStore.reservedsList
+        let convocation = spectatorStore.convocation
+        let reserved = spectatorStore.reservedsList
         const charEndRow = convocation.endRow;
         const allSeatrowData = [];
 
@@ -73,7 +73,7 @@
         if(seat.reservedID === null){
             reservation.value = {
                 seatNumber: seat.seatNumber,
-                reservedID: usersStore.userID,
+                reservedID: spectatorStore.spectatorID,
             }
         }
         clicks.value += 1 
@@ -100,11 +100,11 @@
                 // date: moment(date.value).format('YYYY-MM-DD'),
             }
             let res = await Api.Reservation.addReserved(body);
-            await usersStore.setReservedsList(res.data.reserved)
+            await spectatorStore.setReservedsList(res.data.reserved)
             prepareSeatRow()
-            usersStore.setUsersListData(res.data.users)
-            usersStore.setbookingID("")
-            usersStore.setSeatAvailable(res.data.convocation.seatAvailable)
+            spectatorStore.setSpectatorListData(res.data.spectator)
+            spectatorStore.setbookingID("")
+            spectatorStore.setSeatAvailable(res.data.convocation.seatAvailable)
         }
     }
 </script>

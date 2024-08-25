@@ -14,14 +14,19 @@ const routes = [
     component: () => import("@/components/Login.vue"),
   },
   {
-    path: "/user-list",
-    name: "user-list",
-    component: () => import("@/views/user/UserList.vue"),
+    path: "/spectator-list",
+    name: "spectator-list",
+    component: () => import("@/views/spectator/SpectatorList.vue"),
   },
   {
     path: "/admin",
     name: "admin",
     component: () => import("@/views/admin/AdminDashboard.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/admin/LoginPage.vue"),
   },
 ]
 
