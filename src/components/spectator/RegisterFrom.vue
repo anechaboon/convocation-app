@@ -41,7 +41,10 @@ const register = async () => {
             if (res.status === 201) {
                 spectatorStore.setSpectatorData(res.data)
                 router.push('/spectator-list');
+            }else{
+                proxy.$showAlert('Register Failed!', res.data.message, 'warning');
             }
+
         } catch (error) {
             console.error('Error during registration:', error);
         }
@@ -50,42 +53,44 @@ const register = async () => {
 </script>
 
 <template>
-    <div v-if="spectatorStore.openModalRegister" class="modal-overlay  fade show">
+    <div v-if="spectatorStore.openModalRegister" class="modal-overlay fade show">
         <div class="modal-content">
-            <div class="row mb-3 justify-content-end">
-                <div class="col-1" @click="spectatorStore.setOpenModalRegister(false)">
+            <div class="row mb-3">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <h5><b>Registration</b></h5>
+                </div>
+
+                <div class="col-2" @click="spectatorStore.setOpenModalRegister(false)">
                 <p><b>x</b></p>
                 </div>
             </div>
             <div class="row mb-2">
-                <div class="col-3">
-                    First Name
-                </div>
-                <div class="col-7">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <p class="float-start mb-1">First Name</p>
                     <input class="form-control" type="text" name="first_name" id="first_name" v-model="firstName">
                 </div>
             </div>
             <div class="row mb-2">
-                <div class="col-3">
-                    Last Name
-                </div>
-                <div class="col-7">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <p class="float-start mb-1">Last Name</p>
                     <input class="form-control" type="text" name="last_name" id="last_name" v-model="lastName">
                 </div>
             </div>
             <div class="row mb-2">
-                <div class="col-3">
-                    Telephone
-                </div>
-                <div class="col-7">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <p class="float-start mb-1">Telephone</p>
                     <input class="form-control" type="text" name="phoneNumber" id="phoneNumber" v-model="phoneNumber" @input="validatePhoneNumber" >
-                    <span v-if="!isValidPhone" style="color: red">Invalid phone number</span>
+                    <span class="float-start" v-if="!isValidPhone" style="color: red">Invalid phone number</span>
                 </div>
             </div>
-            <div class="row mb-2">
-                <div class="col-3"></div>
-                <div class="col-7">
-                    <button class="btn btn-primary form-control" @click="register()">Register</button>
+            <div class="row mb-4">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <button class="btn btn-primary form-control mt-2" @click="register()">Register</button>
                 </div>
             </div>
         </div>
@@ -106,7 +111,7 @@ const register = async () => {
     }
 
     .modal-content {
-        width: 70%;
+        width: 35%;
         background-color: white;
         padding: 20px;
         border-radius: 10px;

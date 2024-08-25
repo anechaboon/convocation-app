@@ -3,8 +3,6 @@ import axios from 'axios';
 // ตั้งค่า Base URL
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 
-// กำหนด Headers แบบ global
-axios.defaults.headers.common['Authorization'] = 'Bearer your_token_here';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 // สร้าง baseUrl โดยใช้ environment variable
@@ -57,8 +55,14 @@ class Reservation {
         }
     }
     async addReserved(data){
+        let token = localStorage.getItem('user-token');
+        let config = {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            }
+        };
         try {
-            const response = await axios.post(baseUrl + '/reservation' , data);
+            const response = await axios.post(baseUrl + '/reservation' , data, config);
             return response;
         } catch (err) {
             return err.response;
@@ -69,9 +73,33 @@ class User {
     async login(data){
         try {
             const response = await axios.post(baseUrl + '/user/login', data);
+            
+            if (response.data.token) {
+                localStorage.setItem('user-token', response.data.token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+            }
+
             return response;
         } catch (err) {
             return err.response;
+        }
+    }
+    logout() {
+        localStorage.removeItem('user-token');
+    }
+
+    getToken() {
+        return localStorage.getItem('user-token');
+    }
+
+    isLoggedIn() {
+        return !!this.getToken();
+    }
+
+    setAuthorizationHeader() {
+        const token = this.getToken();
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         }
     }
 }

@@ -1,6 +1,7 @@
 
 
 import { createRouter, createWebHistory } from 'vue-router';
+import Api from "@/services/endpoint.js";
 
 const routes = [
   {
@@ -19,9 +20,15 @@ const routes = [
     component: () => import("@/views/spectator/SpectatorList.vue"),
   },
   {
-    path: "/admin",
-    name: "admin",
+    path: '/admin',
     component: () => import("@/views/admin/AdminDashboard.vue"),
+    beforeEnter: (to, from, next) => {
+      if (Api.User.isLoggedIn()) {
+        next();
+      } else {
+        next('/login');
+      }
+    }
   },
   {
     path: "/login",

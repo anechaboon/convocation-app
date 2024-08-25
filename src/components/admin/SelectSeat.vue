@@ -4,7 +4,8 @@
     import 'vue3-easy-data-table/dist/style.css';
     import { useSpectatorStore } from "@/store/spectator";
     import { getCurrentInstance } from 'vue';
-    // import moment from 'moment';
+    import Swal from 'sweetalert2';
+// import moment from 'moment';
 
     // const date = ref(new Date());
     // const currentDate = ref(moment(date.value).format('YYYY-MM-DD'))
@@ -84,7 +85,22 @@
         } else{
             clearTimeout(timer.value); 
             clicks.value = 0;
-            confirmReserve()
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Reserve!',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonClass: 'btn btn-danger mt-2',
+                cancelButtonClass: 'btn btn-secondary ml-2 mt-2',
+            }).then(function (result) {
+                console.log(`🚀 log:result`,result )
+                if(result.value){
+                    confirmReserve()
+                }
+            });
         }  
         
     };
@@ -100,11 +116,17 @@
                 // date: moment(date.value).format('YYYY-MM-DD'),
             }
             let res = await Api.Reservation.addReserved(body);
-            await spectatorStore.setReservedsList(res.data.reserved)
-            prepareSeatRow()
-            spectatorStore.setSpectatorListData(res.data.spectator)
-            spectatorStore.setbookingID("")
-            spectatorStore.setSeatAvailable(res.data.convocation.seatAvailable)
+
+            if(res.status == 201){
+                await spectatorStore.setReservedsList(res.data.reserved)
+                prepareSeatRow()
+                spectatorStore.setSpectatorListData(res.data.spectators)
+                spectatorStore.setbookingID("")
+                spectatorStore.setConvocation(res.data.convocation)
+
+            }else{
+                proxy.$showAlert('Reserve Failed!', res.data.message, 'warning');
+            }
         }
     }
 </script>

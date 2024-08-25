@@ -23,7 +23,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 40px;
+  margin-top: 25px;
 }
 .min-height-md{
   min-height: 18em;
@@ -35,13 +35,21 @@ export default {
   width: fit-content;
 }
 body {
-  background-image: url('/src/assets/bg-img.jpg'); /* ใส่ path ของรูปภาพ */
-  background-size: cover; /* ขยายภาพให้เต็มหน้า */
+  background-image: url('/src/assets/bg-img.png'); /* ใส่ path ของรูปภาพ */
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed; 
+
 }
 .card {
   border-radius: var(--bs-border-radius) !important;
   background-color: white;
   padding: 1.5rem !important;
+}
+.card-2{
+  border-radius: var(--bs-border-radius) !important;
+  background-color: white;
+  padding: 1rem !important;
 }
 .btn-primary{
   --bs-btn-color: #fff;
@@ -51,5 +59,16 @@ body {
   --bs-btn-hover-bg: #47a6ef;
   --bs-btn-hover-border-color: #84b4d8;
 }
-
+.customize-table{
+  --easy-table-header-font-size: 16px;
+  --easy-table-body-row-font-size: 15px;
+}
+.swal2-confirm {
+  --bs-btn-color: #fff;
+  background-color: #84b4d8;
+  --bs-btn-border-color: #84b4d8;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #47a6ef;
+  --bs-btn-hover-border-color: #84b4d8;
+}
 </style>

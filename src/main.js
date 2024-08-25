@@ -27,13 +27,12 @@ app.use(pinia);
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.config.globalProperties.$showAlert = (title, text, icon = 'success') => {
-    Swal.fire({
-      title: title,
-      text: text,
-      icon: icon,
-      confirmButtonText: 'Ok'
-    });
-  };
+  Swal.fire({
+    title: title,
+    text: text,
+    icon: icon,
+    confirmButtonText: 'Ok'
+  });
+};
 
-  
 app.mount('#app');
