@@ -27,10 +27,18 @@ class User {
             return err.response;
         }
     }
+    async updateUser(id, data){
+        try {
+            const response = await axios.put(baseUrl + '/users/' + id , data);
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
 }
 
 class Convocation {
-    async getConvocation(queryString){
+    async getConvocation(queryString = ''){
         try {
             const response = await axios.get(baseUrl + '/convocation' + queryString);
             return response;
@@ -41,7 +49,27 @@ class Convocation {
 
 }
 
+class Reservation {
+    async getReserved(queryString = ''){
+        try {
+            const response = await axios.get(baseUrl + '/reservation' + queryString);
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+    async addReserved(data){
+        try {
+            const response = await axios.post(baseUrl + '/reservation' , data);
+            return response;
+        } catch (err) {
+            return err.response;
+        }
+    }
+}
+
 export default {
     User: new User(),
-    Convocation: new Convocation()
+    Convocation: new Convocation(),
+    Reservation: new Reservation(),
 }

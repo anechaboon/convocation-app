@@ -1,6 +1,6 @@
 <script setup>
 import SelectSeat from '../../components/admin/SelectSeat.vue';
-import CountUser from '../../components/user/CountUser.vue';
+import CountUser from '../../components/admin/CountUser.vue';
 import UserListTable from '../../components/admin/UserListTable.vue';
 </script>
 <template>
@@ -11,7 +11,7 @@ import UserListTable from '../../components/admin/UserListTable.vue';
                 <SelectSeat />
             </div>
             <div class="col-12 col-md-6">
-                <UserListTable />
+                <UserListTable ref="userTable"/>
             </div>
         </div>
     </div>

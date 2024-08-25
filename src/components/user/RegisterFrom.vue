@@ -2,39 +2,57 @@
 import Api from "@/services/endpoint.js";
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
-import moment from 'moment';
+// import moment from 'moment';
 import { useUsersStore } from "@/store/users";
-const usersStore = useUsersStore();
+import { getCurrentInstance } from 'vue';
 
+const usersStore = useUsersStore();
+const { proxy } = getCurrentInstance(); // ใช้ getCurrentInstance เพื่อเข้าถึง globalProperties
 // ใช้ Composition API ในการประกาศตัวแปร
 const firstName = ref("");
 const lastName = ref("");
 const phoneNumber = ref("");
-const date = ref(new Date());
+const isValidPhone = ref(true);
+// const date = ref(new Date());
 
 // ใช้ Vue Router
 const router = useRouter();
 
-// ฟังก์ชันการลงทะเบียน
+const validatePhoneNumber = () => {
+    const phoneRegex = /^[0-9]{10}$/;
+    isValidPhone.value = phoneRegex.test(phoneNumber.value);
+}
+
 const register = async () => {
-    const formattedDate = moment(date.value).format('YYYY-MM-DD');
-    const body = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        phoneNumber: phoneNumber.value,
-        date: formattedDate
-    };
-    
-    try {
-        const res = await Api.User.register(body);
-        if (res.status === 201) {
-            console.log(`🚀 log:res.data`,res.data )
-            usersStore.setUserData(res.data)
-            router.push('/user-list');
+    if(!isValidPhone.value || phoneNumber.value == ""){
+       
+        proxy.$showAlert('Invalid phone number!', 'Please Input Phone Number', 'warning');
+
+    } else if (firstName.value == "" || lastName.value == "") {
+        proxy.$showAlert('Invalid name!', 'Please Input First Name / Last Name', 'warning');
+
+    } else {
+        // const formattedDate = moment(date.value).format('YYYY-MM-DD');
+        const body = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            phoneNumber: phoneNumber.value,
+            // date: formattedDate
+        };
+        
+        try {
+            const res = await Api.User.register(body);
+            if (res.status === 201) {
+                console.log(`🚀 log:res.data`,res.data )
+                usersStore.setUserData(res.data)
+                router.push('/user-list');
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
         }
-    } catch (error) {
-        console.error('Error during registration:', error);
     }
+
+    
 };
 </script>
 
@@ -61,11 +79,12 @@ const register = async () => {
             Telephone
         </div>
         <div class="col-7">
-            <input class="form-control" type="text" name="phoneNumber" id="phoneNumber" v-model="phoneNumber">
+            <input class="form-control" type="text" name="phoneNumber" id="phoneNumber" v-model="phoneNumber" @input="validatePhoneNumber" >
+            <span v-if="!isValidPhone" style="color: red">Invalid phone number</span>
         </div>
     </div>
 
-    <div class="row mb-2">
+    <!-- <div class="row mb-2">
         <div class="col-3">
             Date
         </div>
@@ -76,7 +95,7 @@ const register = async () => {
                 :min-date="new Date()"
             ></VueDatePicker>
         </div>
-    </div>
+    </div> -->
     <div class="row mb-2">
         <div class="col-3"></div>
         <div class="col-7">

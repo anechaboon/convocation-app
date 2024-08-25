@@ -10,13 +10,13 @@ const fetchConvocation = async () => {
   // let date = moment().format('YYYY-MM-DD'); // ใช้ moment() แทน this.date
   // let queryString = `?date=${date}`;
   let res = await Api.Convocation.getConvocation();
-  console.log('Fetched seat data:', res.data.registerAvailable); // ตรวจสอบค่าที่ดึงมา
+  console.log('Fetched seat data:', res.data.seatAvailable); // ตรวจสอบค่าที่ดึงมา
 
-  usersStore.setRegisterAvailable(res.data.registerAvailable); 
+  usersStore.setSeatAvailable(res.data.seatAvailable); 
   usersStore.setRegistered(res.data.registered); 
 
   
-  console.log('Available seat after update:', usersStore.registerAvailable); // ตรวจสอบค่าหลังการอัพเดต
+  console.log('Available seat after update:', usersStore.seatAvailable); // ตรวจสอบค่าหลังการอัพเดต
 };
 
 // เรียกใช้ fetchSeat เมื่อคอมโพเนนต์ถูกเมาท์
@@ -27,7 +27,8 @@ onMounted(() => {
 
 <template>
   <div>
-    <p>Available Seat: {{ usersStore.registerAvailable }}</p>
+    <p>Seat Available: {{ usersStore.seatAvailable }}</p>
+    <p>Register Available: {{ usersStore.registerAvailable }}</p>
     <p>Registered: {{ usersStore.registered }}</p>
   </div>
 </template>

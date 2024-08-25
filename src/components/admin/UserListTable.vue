@@ -3,20 +3,20 @@
     import { onMounted, ref } from 'vue';
     import EasyDataTable from 'vue3-easy-data-table';
     import 'vue3-easy-data-table/dist/style.css';
+    import { useUsersStore } from "@/store/users";
 
+    const users = useUsersStore();
     // ใช้ ref หรือ reactive แทน data
     const searchUser = ref("");
     const headers = ref([
         { text: "First Name", value: "firstName", sortable: true },
         { text: "Last Name", value: "lastName", sortable: true },
         { text: "Phone Number", value: "phoneNumber", sortable: true },
-        { text: "", value: "" },
-
+        { text: "Operation", value: "operation" },
     ]);
-    const items = ref([]);
-
     // ฟังก์ชันที่ทำงานเมื่อคอมโพเนนต์ถูกเมาท์
     onMounted(async () => {
+        users.setbookingID("")
         fetchUser()
     });
 
@@ -26,12 +26,21 @@
         try {
             const res = await Api.User.getUser(queryString);
             if (res) {
-                items.value = res.data;
+              users.setUsersListData(res.data)
             }
         } catch (error) {
             console.error('Error fetching users:', error);
         }
     };
+    const booking = (user) => {
+        console.log("Edit item:", user);
+        users.setUserData(user)
+        users.setbookingID(user._id)
+        console.log(`🚀 log:users.userID`,users.userID )
+
+    };
+
+  
 
 </script>
 <template>
@@ -39,71 +48,34 @@
       <label>SearchBy:</label><input class="pl-5" v-model="searchUser" @keyup="fetchUser()" />
   </div>
   <EasyDataTable
+      v-model:items-selected="itemsSelected"
       :headers="headers"
-      :items="items"
-  />
+      :items="users.usersList"
+       @click-row="showRow"
+  >
+  
+      <template #item-operation="item">
+        <div class="operation-wrapper" v-if="typeof item.reservedSeat != 'undefined' && item.reservedSeat === false">
+          <span
+            class="operation-icon"
+            :class="{ highlightbooking: item._id == users.bookingID}"
+            @click="booking(item)"
+          >
+          Reserve
+          </span>
+        </div>
+      </template>
+  </EasyDataTable>
 </template>
 
 <style scoped>
+.highlightbooking{
+  background-color: aqua !important;
 
-  /* จัดเรียงที่นั่งให้เป็นกล่อง ๆ */
-  .seat-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-  }
+}
 
-  .seat {
-    background-color: bisque;
-    border-radius: 5px;
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    border: 1px solid #dee2e6;
-    line-height: 50px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  /* จัดการที่นั่งที่ถูกจองแล้ว */
-  .seat.reserved {
-    background-color: rgb(191 214 228);
-  }
-
-  /* สไตล์ปุ่มเพื่อให้ดูเรียบง่ายและเข้ากับหน้าจอขนาดเล็ก */
-  button {
-    width: 100%;
-  }
-
-  /* Media queries สำหรับหน้าจอขนาดเล็ก (มือถือ) */
-  @media (max-width: 576px) {
-    .seat {
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 10px;
-    }
-  }
-
-  /* Media queries สำหรับหน้าจอขนาดกลาง (แท็บเล็ต) */
-  @media (min-width: 768px) {
-    .seat {
-      width: 60px;
-      height: 60px;
-      line-height: 60px;
-      font-size: 12px;
-    }
-  }
-
-  /* Media queries สำหรับหน้าจอขนาดใหญ่ (เดสก์ท็อป) */
-  @media (min-width: 992px) {
-    .seat {
-      width: 70px;
-      height: 70px;
-      line-height: 70px;
-      font-size: 14px;
-    }
-  }
+.operation-wrapper .operation-icon {
+  width: 20px;
+  cursor: pointer;
+}
 </style>
