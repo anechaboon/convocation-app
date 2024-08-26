@@ -96,7 +96,6 @@
                 confirmButtonClass: 'btn btn-danger mt-2',
                 cancelButtonClass: 'btn btn-secondary ml-2 mt-2',
             }).then(function (result) {
-                console.log(`🚀 log:result`,result )
                 if(result.value){
                     confirmReserve()
                 }

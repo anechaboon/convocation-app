@@ -22,7 +22,6 @@ const login = async () => {
                 break;
         
             case 401:
-                console.log(`🚀 log:res`,res )
                 proxy.$showAlert('Login Faild!', res.data.message, 'warning');
                 break;
         }

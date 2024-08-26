@@ -33,7 +33,6 @@ export const useSpectatorStore = defineStore('spectator', {
         const res = await Api.Spectator.getSpectator(queryString);
         if (res) {
           this.spectatorList = res.data
-          console.log(`🚀 log:this.spectatorList`,this.spectatorList )
         }
       } catch (error) {
           console.error('Error fetching spectator:', error);
