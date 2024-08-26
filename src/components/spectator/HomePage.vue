@@ -9,7 +9,7 @@ const router = useRouter();
 <template>
     <RegisterForm />
     <div class="d-flex justify-content-end">
-        <p class="mr-3 admin-login" @click="router.push('/login');">ADMIN</p>
+        <p class="mr-3 admin-login cursor" @click="router.push('/login');">ADMIN</p>
     </div>
     <div class="container rounded bg-white min-height-md" style="width: 35%; min-height: 28em;">
         <div class="justify-content-center pt-5">

@@ -61,8 +61,8 @@ const register = async () => {
                     <h5><b>Registration</b></h5>
                 </div>
 
-                <div class="col-2" @click="spectatorStore.setOpenModalRegister(false)">
-                <p><b>x</b></p>
+                <div class="col-2" >
+                <p><b class="cursor" @click="spectatorStore.setOpenModalRegister(false)">x</b></p>
                 </div>
             </div>
             <div class="row mb-2">

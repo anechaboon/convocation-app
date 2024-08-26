@@ -2,7 +2,7 @@
 import Api from "@/services/endpoint.js";
 import { ref, getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
-
+import HomeButton from './HomeButton.vue'
 const { proxy } = getCurrentInstance();
 const router = useRouter();
 
@@ -33,6 +33,7 @@ const login = async () => {
 </script>
 
 <template>
+    <HomeButton></HomeButton>
     <div class="container card min-height-md" style="width: 35%">
         <div class="row mb-2 mt-3">
             <div class="col-2"></div>
