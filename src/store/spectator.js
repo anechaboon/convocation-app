@@ -35,14 +35,14 @@ export const useSpectatorStore = defineStore('spectator', {
           this.spectatorList = res.data
         }
       } catch (error) {
-          console.error('Error fetching spectator:', error);
+        console.error('Error fetching spectator:', error);
       }
     },
     async loadConvocation(){
       try {
-          const res = await Api.Convocation.getConvocation();
+        const res = await Api.Convocation.getConvocation();
         if(res){
-            this.setConvocation(res.data)
+          this.convocation = res.data
         }
       } catch (error) {
           console.error('Error fetching convocation:', error);
@@ -50,10 +50,10 @@ export const useSpectatorStore = defineStore('spectator', {
     },
     async loadReserved(){
       try {
-          const res = await Api.Reservation.getReserved();
-          if(res){
-            this.setReservedsList(res.data)
-          }
+        const res = await Api.Reservation.getReserved();
+        if(res){
+          this.reservedsList = res.data
+        }
       } catch (error) {
           console.error('Error fetching reserved:', error);
       }
@@ -61,15 +61,8 @@ export const useSpectatorStore = defineStore('spectator', {
     setReservedsList(reservedsList){
       this.reservedsList = reservedsList
     },
-    setSeatAvailable(seatAvailable){
-      this.seatAvailable = seatAvailable
-    },
-    setRegisterAvailable(registerAvailable){
-      this.registerAvailable = registerAvailable
-    },
-    setRegistered(registered){
-      this.registered = registered
-    },
+  
+
     setSpectatorData(data){
       this.spectatorID = data._id
       this.firstName = data.firstName
