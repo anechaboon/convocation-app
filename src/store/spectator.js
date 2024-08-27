@@ -3,9 +3,6 @@ import Api from "@/services/endpoint.js";
 
 export const useSpectatorStore = defineStore('spectator', {
   state: () => ({
-    seatAvailable: 0,
-    registerAvailable: 0,
-    registered: 0,
     spectatorID: "",
     firstName: "",
     lastName: "",

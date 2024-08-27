@@ -69,7 +69,7 @@
 
     }
 
-    const reserve = (event, seat) => {
+    const reserve = async (event, seat) => {
         // check seat has reserved ?
         if(seat.reservedID === null){
             reservation.value = {
@@ -77,29 +77,35 @@
                 reservedID: spectatorStore.spectatorID,
             }
         }
+
         clicks.value += 1 
         if(clicks.value === 1) {
-        timer.value = setTimeout(function() {
-            clicks.value = 0
-        }, 700);
+            timer.value = setTimeout(function () {
+                clicks.value = 0
+            }, 700);
         } else{
             clearTimeout(timer.value); 
             clicks.value = 0;
 
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, Reserve!',
-                cancelButtonText: 'No, cancel!',
-                confirmButtonClass: 'btn btn-danger mt-2',
-                cancelButtonClass: 'btn btn-secondary ml-2 mt-2',
-            }).then(function (result) {
-                if(result.value){
-                    confirmReserve()
-                }
-            });
+            await spectatorStore.loadConvocation()
+            if(spectatorStore.convocation.seatAvailable > 0) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Reserve!',
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonClass: 'btn btn-danger mt-2',
+                    cancelButtonClass: 'btn btn-secondary ml-2 mt-2',
+                }).then( function (result) {
+                    if(result.value){
+                        confirmReserve()
+                    }
+                });
+            }else{
+                proxy.$showAlert('Reserve Failed!', 'Fully Reserved', 'warning');
+            }
         }  
         
     };
